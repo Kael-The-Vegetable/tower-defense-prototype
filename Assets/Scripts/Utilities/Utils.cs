@@ -5,7 +5,7 @@ public static class Utils
 	public static Vector3 PointerToWorldXZ(Camera camera, Vector2 mousePosOnScreen)
 	{
 		if (!camera.pixelRect.Contains(mousePosOnScreen))
-		{ Debug.Log("OUTSIDE RANGE"); return Vector3.zero; }
+			return Vector3.zero;
 
 		Ray ray = camera.ScreenPointToRay(mousePosOnScreen);
 		float diff = Vector3.Dot(Vector3.up, ray.direction);
