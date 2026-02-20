@@ -82,7 +82,7 @@ public class InputManager : PersistentSingleton<InputManager>, InputSystem_Actio
 			{
 				tap.Invoke();
 			}
-			else if (ctx.interaction is HoldInteraction)
+			if (ctx.interaction is HoldInteraction)
 			{
 				hold.Invoke(true);
 			}

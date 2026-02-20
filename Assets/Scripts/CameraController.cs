@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ public class CameraController : MonoBehaviour
 		InputManager.Instance.ExamineHold.AddListener(OnExamineHold);
 		InputManager.Instance.Pointer.AddListener(OnPointer);
 		InputManager.Instance.Rotate.AddListener(OnRotate);
+		InputManager.Instance.Look.AddListener(OnLook);
 	}
 	private void OnDisable()
 	{
@@ -50,6 +52,10 @@ public class CameraController : MonoBehaviour
 	private void OnRotate(bool isHolding)
 	{
 		_isRotating = isHolding;
+	}
+	private void OnLook(Vector2 arg0)
+	{
+		
 	}
 	#endregion
 }
