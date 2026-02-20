@@ -34,7 +34,7 @@ public class CameraController : MonoBehaviour
 		_isDragging = isDragging;
 		if (_isDragging)
 		{
-			_dragOrigin = Utils.PointerToWorldOnXZPlane(Camera.main, _mousePos);
+			_dragOrigin = Utils.PointerToWorldXZ(Camera.main, _mousePos);
 			_origPos = transform.position;
 		}
 	}
@@ -43,9 +43,12 @@ public class CameraController : MonoBehaviour
 		_mousePos = pos;
 		if (_isDragging)
 		{
-			Debug.Log("Mouse Pos: " + pos);
-			Vector3 difference = Utils.PointerToWorldOnXZPlane(Camera.main, _mousePos) - _dragOrigin - transform.position;
-			transform.position = _origPos - difference;
+			Vector3 newPos = Utils.PointerToWorldXZ(Camera.main, _mousePos);
+			if (newPos != Vector3.zero)
+			{
+				Vector3 difference = newPos - _dragOrigin - transform.position;
+				transform.position = _origPos - difference;
+			}
 		}
 	}
 	private void OnRotate(bool isHolding)
