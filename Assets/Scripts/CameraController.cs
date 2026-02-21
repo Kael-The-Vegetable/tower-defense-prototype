@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+	[SerializeField] private Collider _boundingBox;
+
 	private bool _isRotating;
 
 	private bool _isDragging;
@@ -45,11 +47,13 @@ public class CameraController : MonoBehaviour
 		_mousePos = pos;
 		if (_isDragging)
 		{
-			Vector3 newPos = Utils.PointerToWorldXZ(Camera.main, _mousePos);
-			if (newPos != Vector3.zero)
+			Vector3 newDrag = Utils.PointerToWorldXZ(Camera.main, _mousePos);
+			if (newDrag != Vector3.zero)
 			{
-				newPos.y = 0;
-				transform.position += _dragOrigin - newPos;
+				newDrag.y = 0;
+				Vector3 newPosition = transform.position + _dragOrigin - newDrag;
+				if (_boundingBox.bounds.Contains(newPosition))
+					transform.position = newPosition;
 			}
 		}
 	}
