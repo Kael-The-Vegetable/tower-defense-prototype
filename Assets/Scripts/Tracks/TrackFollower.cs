@@ -40,10 +40,12 @@ public class TrackFollower : MonoBehaviour
     {
         currentTrack = Track.Instance;
         splineAnimate.Container = currentTrack.trackSpline;
-        currentTrack.trackTick += OnTrackTick;
+        currentTrack.onTrackTick += OnTrackTick;
         splineAnimate.AnimationMethod = SplineAnimate.Method.Speed;
+        splineAnimate.Loop = SplineAnimate.LoopMode.Once;
         ChangeSpeed(_moveSpeed);
         splineAnimate.Play();
+
 
     }
 
@@ -58,6 +60,9 @@ public class TrackFollower : MonoBehaviour
 
     private void OnTrackTick(float deltaTime)
     {
-       
+        if (splineAnimate.NormalizedTime <= 1)
+        {
+            Track.Instance.onEndReached?.Invoke(this);
+        }
     }
 }

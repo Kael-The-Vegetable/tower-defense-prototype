@@ -9,8 +9,12 @@ public class Track : Singleton<Track>
 {
     public SplineContainer trackSpline;
     public List<TrackFollower> activeFollowers = new List<TrackFollower>();
-    public UltEvent<float> trackTick;
-
+    public UltEvent<float> onTrackTick;
+    public UltEvent<TrackFollower> onEndReached;
+    public UltEvent<TrackFollower> onFollowerAdded;
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+    public UltEvent<TrackFollower?> onFollowerRemoved;
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
     protected override void Initialize()
     {
         activeFollowers = new List<TrackFollower>();
@@ -26,6 +30,7 @@ public class Track : Singleton<Track>
             {
                 instance.activeFollowers.Add(trackFollower);
                 trackFollower.AddToTrack();
+                instance.onFollowerAdded?.Invoke(trackFollower);
             }
         }
         catch(NullReferenceException exception)
@@ -43,6 +48,7 @@ public class Track : Singleton<Track>
         if (instance.activeFollowers != null && instance.activeFollowers.Contains(trackFollower))
         {
             instance.activeFollowers.Remove(trackFollower);
+            instance.onFollowerAdded?.Invoke(trackFollower);
         }
     }
 
@@ -50,7 +56,7 @@ public class Track : Singleton<Track>
     {
         if (activeFollowers.Count > 0)
         {
-            trackTick?.Invoke(Time.deltaTime);
+            onTrackTick?.Invoke(Time.deltaTime);
         }
     }
 
