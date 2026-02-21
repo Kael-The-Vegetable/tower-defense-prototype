@@ -1,20 +1,25 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+	[SerializeField] private Collider _boundingBox;
+
 	private bool _isRotating;
 
 	private bool _isDragging;
 	private Vector3 _dragOrigin;
 
 	private Vector2 _mousePos;
+	private Vector3 _lookDelta;
 
 	private void OnEnable()
 	{
 		InputManager.Instance.ExamineHold.AddListener(OnExamineHold);
 		InputManager.Instance.Pointer.AddListener(OnPointer);
 		InputManager.Instance.Rotate.AddListener(OnRotate);
+		InputManager.Instance.Look.AddListener(OnLook);
 	}
 	private void OnDisable()
 	{
@@ -23,6 +28,7 @@ public class CameraController : MonoBehaviour
 			InputManager.Instance.ExamineHold.RemoveListener(OnExamineHold);
 			InputManager.Instance.Pointer.RemoveListener(OnPointer);
 			InputManager.Instance.Rotate.RemoveListener(OnRotate);
+			InputManager.Instance.Look.RemoveListener(OnLook);
 		}
 	}
 
@@ -33,6 +39,7 @@ public class CameraController : MonoBehaviour
 		if (_isDragging)
 		{
 			_dragOrigin = Utils.PointerToWorldXZ(Camera.main, _mousePos);
+			_dragOrigin.y = 0;
 		}
 	}
 	public void OnPointer(Vector2 pos)
@@ -40,16 +47,31 @@ public class CameraController : MonoBehaviour
 		_mousePos = pos;
 		if (_isDragging)
 		{
-			Vector3 newPos = Utils.PointerToWorldXZ(Camera.main, _mousePos);
-			if (newPos != Vector3.zero)
+			Vector3 newDrag = Utils.PointerToWorldXZ(Camera.main, _mousePos);
+			if (newDrag != Vector3.zero)
 			{
-				transform.position += _dragOrigin - newPos;
+				newDrag.y = 0;
+				Vector3 newPosition = transform.position + _dragOrigin - newDrag;
+				if (_boundingBox.bounds.Contains(newPosition))
+					transform.position = newPosition;
 			}
 		}
 	}
 	private void OnRotate(bool isHolding)
 	{
 		_isRotating = isHolding;
+		StartCoroutine(Rotator());
 	}
+	private void OnLook(Vector2 delta) => _lookDelta = new Vector3(0, delta.x);
+
 	#endregion
+
+	private IEnumerator Rotator()
+	{
+		while (_isRotating)
+		{
+			transform.eulerAngles += _lookDelta;
+			yield return null;
+		}
+	}
 }

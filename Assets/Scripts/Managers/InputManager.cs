@@ -10,15 +10,15 @@ public class InputManager : PersistentSingleton<InputManager>, InputSystem_Actio
 	private InputSystem_Actions _actions;
 
 	#region Events
-	public UnityEvent<Vector2> Move { get; private set; } = new();
-	public UnityEvent<Vector2> Look { get; private set; } = new();
-	public UnityEvent<Vector2> Pointer { get; private set; } = new();
-	public UnityEvent Interact { get; private set; } = new();
-	public UnityEvent<bool> InteractHold { get; private set; } = new();
-	public UnityEvent<Vector2> Scroll { get; private set; } = new();
-	public UnityEvent<bool> Rotate { get; private set; } = new();
-	public UnityEvent Examine { get; private set; } = new();
-	public UnityEvent<bool> ExamineHold { get; private set; } = new();
+	public UnityEvent<Vector2> Move { get; } = new();
+	public UnityEvent<Vector2> Look { get; } = new();
+	public UnityEvent<Vector2> Pointer { get; } = new();
+	public UnityEvent Interact { get; } = new();
+	public UnityEvent<bool> InteractHold { get; } = new();
+	public UnityEvent<Vector2> Scroll { get; } = new();
+	public UnityEvent<bool> Rotate { get; } = new();
+	public UnityEvent Examine { get; } = new();
+	public UnityEvent<bool> ExamineHold { get; } = new();
 	#endregion
 
 	#region Necessesary Initializations
@@ -82,7 +82,7 @@ public class InputManager : PersistentSingleton<InputManager>, InputSystem_Actio
 			{
 				tap.Invoke();
 			}
-			else if (ctx.interaction is HoldInteraction)
+			if (ctx.interaction is HoldInteraction)
 			{
 				hold.Invoke(true);
 			}

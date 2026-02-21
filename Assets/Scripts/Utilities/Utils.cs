@@ -9,7 +9,7 @@ public static class Utils
 
 		Ray ray = camera.ScreenPointToRay(mousePosOnScreen);
 		float diff = Vector3.Dot(Vector3.up, ray.direction);
-		if (Mathf.Abs(diff) < float.Epsilon)
+		if (diff == 0)
 			return Vector3.zero;
 
 		float delta = Vector3.Dot(-ray.origin, Vector3.up) / diff;
