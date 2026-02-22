@@ -7,6 +7,12 @@
       "dependencies": {},
       "hash": "98b3642b5e20a29e8b745e70ec901aa7806c202c"
     },
+    "com.kybernetik.ultevents": {
+      "version": "file:com.kybernetik.ultevents",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.ai.navigation": {
       "version": "2.0.10",
       "depth": 0,
